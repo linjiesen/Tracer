@@ -114,6 +114,18 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
+# 騰訊雲短信應用的app_id
+TENCENT_SMS_APP_ID = 66666666
+# 騰訊雲短信應用的 app_key
+TENCENT_SMS_APP_KEY = "6666666666666666666666666666"
+# 騰訊雲短信籤名內容
+TENCENT_SMS_SIGN = "代碼and詩"
+
+TENCENT_SMS_TEMPLATE = {
+    'register': 641424,
+    'login': 641422,
+}
+
 try:
     from .local_settings import *
 except ImportError:
