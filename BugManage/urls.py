@@ -16,9 +16,11 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, re_path
 from SMS import views
+from django.conf.urls import url, include
 
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    re_path(r'^send/sms/', views.send_sms),
+    url(r'^SMS/', include(('SMS.urls', 'SMS'), namespace='SMS')),
+    url(r'^', include('web.urls')),
 ]
