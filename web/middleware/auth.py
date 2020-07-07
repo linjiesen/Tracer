@@ -1,4 +1,6 @@
+from django.shortcuts import redirect
 from django.utils.deprecation import MiddlewareMixin
+from django.conf import settings
 
 from web import models
 
@@ -11,3 +13,15 @@ class AuthMiddleware(MiddlewareMixin):
 
         user_object = models.UserInfo.objects.filter(id=user_id).first()
         request.tracer = user_object
+
+        # 白名单，没有登录都可以访问的URL
+        """
+        1.获取当前用户访问的URL
+        2.检查URL是否在白名单中，如果在则可以继续向后访问，如果不在则进行判断是否已经登录
+        """
+        if request.path_info in settings.WHITE_REGEX_URL_LIST:
+            return
+
+        # 检查用户是否已经登录，已经登录继续往后走，未登录则返回登录页面
+        if not request.tracer:
+            return redirect('login')

@@ -3,7 +3,8 @@
 用户账户相关功能：注册、短信、登录、注销
 """
 from io import BytesIO
-from utils.image_code import check_code
+import uuid
+import datetime
 
 from django.shortcuts import render, HttpResponse, redirect
 from django.http import JsonResponse
@@ -11,6 +12,7 @@ from django.db.models import Q
 
 from web.forms.account import RegisterModelForm, SendSmsForm, LoginSMSForm, LoginForm
 from web import models
+from utils.image_code import check_code
 
 
 def register(request):
@@ -20,7 +22,19 @@ def register(request):
 
     form = RegisterModelForm(data=request.POST)
     if form.is_valid():
-        form.save()
+        instance = form.save()
+
+        # 创建交易记录
+        policy_object = models.PricePolicy.objects.filter(category=1, title="个人免费版").first()
+        models.Transaction.objects.create(
+            status=2,
+            order=str(uuid.uuid4()),
+            user=instance,
+            price_policy=policy_object,
+            count=0,
+            price=0,
+            start_datetime=datetime.datetime.now(),
+        )
         return JsonResponse({'status': True, 'data': '/login/'})
 
     return JsonResponse({'status': False, 'error': form.errors})

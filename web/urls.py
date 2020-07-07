@@ -2,6 +2,7 @@ from django.urls import path, re_path
 from django.conf.urls import url, include
 from web.views import account
 from web.views import home
+from web.views import project
 
 
 urlpatterns = [
@@ -12,4 +13,7 @@ urlpatterns = [
     url(r'^login/$', account.login, name='login'),
     url(r'^logout/$', account.logout, name='logout'),
     url(r'^index/$', home.index, name='index'),
+
+    # 项目管理
+    url(r'^project/list/$', project.project_list, name='project_list')
 ]
