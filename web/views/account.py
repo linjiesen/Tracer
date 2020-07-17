@@ -16,15 +16,21 @@ from utils.image_code import check_code
 
 
 def register(request):
+    """ 注册 """
     if request.method == 'GET':
         form = RegisterModelForm()
         return render(request, 'register.html', {'form': form})
 
     form = RegisterModelForm(data=request.POST)
     if form.is_valid():
+        # 验证通过，写入数据库（密码要是密文）
+        # instance = form.save，在数据库中新增一条数据，并将新增的这条数据赋值给instance
+
+        # 用户表中新建一条数据（注册）
         instance = form.save()
 
         # 创建交易记录
+        # 方式一
         policy_object = models.PricePolicy.objects.filter(category=1, title="个人免费版").first()
         models.Transaction.objects.create(
             status=2,
@@ -35,6 +41,9 @@ def register(request):
             price=0,
             start_datetime=datetime.datetime.now(),
         )
+
+        # 方式二
+
         return JsonResponse({'status': True, 'data': '/login/'})
 
     return JsonResponse({'status': False, 'error': form.errors})
@@ -58,10 +67,10 @@ def login_sms(request):
     form = LoginSMSForm(request.POST)
     if form.is_valid():
         # 用户输入正确，登录成功
-        user_object = form.cleaned_data['mobile_phone']
+        mobile_phone = form.cleaned_data['mobile_phone']
         # 用户信息放入session
+        user_object = models.UserInfo.objects.filter(mobile_phone=mobile_phone).first()
         request.session['user_id'] = user_object.id
-        request.session['user_name'] = user_object.username
         request.session.set_expiry(60 * 60 * 24 * 14)
 
         return JsonResponse({'status': True, 'data': "/index/"})

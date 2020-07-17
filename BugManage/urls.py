@@ -14,13 +14,13 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path, re_path
+# from django.urls import path, re_path
 from SMS import views
 from django.conf.urls import url, include
 
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
+    url(r'^admin/', admin.site.urls),
     url(r'^SMS/', include(('SMS.urls', 'SMS'), namespace='SMS')),
     url(r'^', include('web.urls')),
 ]

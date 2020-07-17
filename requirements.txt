@@ -5,12 +5,13 @@ cos-python-sdk-v5==1.8.0
 defusedxml==0.5.0
 dicttoxml==1.7.4
 diff-match-patch==20181111
-Django==2.1.4
+Django==3.0.7
 django-crispy-forms==1.7.2
 django-formtools==2.1
 django-import-export==1.1.0
 django-pure-pagination==0.3.0
 django-ranged-response==0.2.0
+django-redis==4.12.1
 django-reversion==3.0.2
 django-simple-captcha==0.5.9
 et-xmlfile==1.0.1
