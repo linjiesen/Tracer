@@ -33,5 +33,5 @@ urlpatterns = [
         url(r'^wiki/edit/(?P<wiki_id>\d+)/$', wiki.wiki_edit, name='wiki_edit'),
 
         url(r'^setting/$', manage.setting, name='setting'),
-    ], None, None)),
+    ], None)),
 ]
