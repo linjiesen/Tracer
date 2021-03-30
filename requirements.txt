@@ -34,7 +34,7 @@ PyMySQL==0.9.3
 pyOpenSSL==17.0.0
 PySocks @ file:///C:/ci/pysocks_1605305839978/work
 pytz==2018.7
-PyYAML==3.13
+PyYAML==5.4
 qcloudsms-py==0.1.4
 redis==3.5.3
 requests==2.23.0
