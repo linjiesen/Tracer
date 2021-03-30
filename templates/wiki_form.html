@@ -1,8 +1,7 @@
 {% extends 'layout/manage.html' %}
 {% load static %}
-
 {% block css %}
-    <link rel="stylesheet" href="{% static 'plugin/editor-md/css/editormd.css' %}">
+    <link rel="stylesheet" href="{% static 'plugin/editor-md/css/editormd.min.css' %}">
     <style>
         .panel-default {
             margin-top: 10px;
@@ -38,35 +37,25 @@
             margin-left: -1px;
         }
 
-        .editormd-fullscreen {
+        .editormd-fullscreen{
             z-index: 1001;
         }
     </style>
-
 {% endblock %}
 
 {% block content %}
     <div class="container-fluid">
+
         <div class="panel panel-default">
             <div class="panel-heading">
                 <div>
-                    <i class="fa fa-book" aria-hidden="true"></i>Wiki文档
+                    <i class="fa fa-book" aria-hidden="true"></i> wiki文档
                 </div>
                 <div class="function">
                     <a type="button" class="btn btn-success btn-xs"
                        href="{% url 'wiki_add' project_id=request.tracer.project.id %}">
-                        <i class="fa fa-plus-circle" aria-hidden="true"></i>新建
+                        <i class="fa fa-plus-circle" aria-hidden="true"></i> 新建
                     </a>
-                    {% if wiki_object %}
-                        <a type="button" class="btn btn-primary btn-xs"
-                           href="{% url 'wiki_edit' project_id=request.tracer.project.id wiki_id=wiki_object.id %}">
-                            <i class="fa fa-edit" aria-hidden="true"></i>编辑
-                        </a>
-                        <a type="button" class="btn btn-danger btn-xs"
-                           href="{% url 'wiki_delete' project_id=request.tracer.project.id wiki_id=wiki_object.id %}">
-                            <i class="fa fa-trash" aria-hidden="true"></i>删除
-                        </a>
-                    {% endif %}
                 </div>
             </div>
             <div class="panel-body">
@@ -75,9 +64,9 @@
 
                     </ul>
 
-
                 </div>
                 <div class="col-sm-9 content">
+
                     <form method="post">
                         {% csrf_token %}
                         {% for field in form %}
@@ -85,11 +74,10 @@
                                 <div class="form-group">
                                     <label for="{{ field.id_for_label }}">{{ field.label }}</label>
                                     <div id="editor">
-                                            {{ field }}
-
+                                        {{ field }}
                                     </div>
+                                    <span class="error-msg">{{ field.errors.0 }}</span>
                                 </div>
-                                <span class="error-msg">{{ field.errors.0 }}</span>
                             {% else %}
                                 <div class="form-group">
                                     <label for="{{ field.id_for_label }}">{{ field.label }}</label>
@@ -99,37 +87,44 @@
                             {% endif %}
                         {% endfor %}
 
-                        <button type="submit" class="btn btn-primary">提交</button>
+                        <button type="submit" class="btn btn-primary">提 交</button>
                     </form>
 
                 </div>
-
+                <div></div>
             </div>
         </div>
+
     </div>
 {% endblock %}
+
 {% block js %}
     <script src="{% static 'plugin/editor-md/editormd.min.js' %}"></script>
-    <script src="{% static 'js/jquery-3.5.1.min.js' %}"></script>
     <script>
-
-        var WIKI_DETAIL_URL = "{% url 'wiki' project_id=request.tracer.project.id %}"
+        var WIKI_DETAIL_URL = "{% url 'wiki' project_id=request.tracer.project.id %}";
+        var WIKI_UPLOAD_URL = "{% url 'wiki_upload' project_id=request.tracer.project.id %}";
 
         $(function () {
+
             initCatalog();
             initEditorMd();
         });
 
         /*
-        初始化markdown编辑器(textarea转换为编辑器)
-        */
+        初始化markdown编辑器（textare转换为编辑器）
+         */
         function initEditorMd() {
             editormd('editor', {
                 placeholder: "请输入内容",
                 height: 500,
                 path: "{% static 'plugin/editor-md/lib/' %}",
+                imageUpload:true,
+                imageFormats:["jpg", "jpeg", "gif", "png", "bmp", "webp"],
+
+                imageUploadURL:WIKI_UPLOAD_URL
             })
         }
+
 
         function initCatalog() {
             $.ajax({
@@ -141,11 +136,12 @@
                         $.each(res.data, function (index, item) {
                             var href = WIKI_DETAIL_URL + "?wiki_id=" + item.id;
                             var li = $("<li>").attr('id', "id_" + item.id).append($('<a>').text(item.title).attr('href', href)).append($('<ul>'));
+
                             if (!item.parent_id) {
                                 // 添加到catalog中
                                 $('#catalog').append(li);
                             } else {
-                                $('#id_' + item.parent_id).children('ul').append(li);
+                                $("#id_" + item.parent_id).children('ul').append(li);
                             }
                         })
                     } else {
@@ -154,5 +150,7 @@
                 }
             })
         }
+
+
     </script>
 {% endblock %}

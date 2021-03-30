@@ -12,6 +12,7 @@ class Tracer(object):
     def __init__(self):
         self.user = None
         self.price_policy = None
+        self.project = None
 
 
 class AuthMiddleware(MiddlewareMixin):

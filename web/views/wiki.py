@@ -1,9 +1,14 @@
 from django.shortcuts import render, redirect, HttpResponse
 from django.urls import reverse
 from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.clickjacking import xframe_options_exempt
 
 from web.forms.wiki import WikiModelForm
 from web import models
+
+from utils.encrypt import uid
+from utils.tencent.cos import upload_file
 
 
 def wiki(request, project_id):
@@ -19,14 +24,15 @@ def wiki(request, project_id):
 
 def wiki_add(request, project_id):
     """wiki添加"""
-    wiki_object = models.Wiki.objects.filter(project_id=project_id).first()
-
-    if not wiki_object:
-        url = reverse('wiki', kwargs={'project_id': project_id})
-        return redirect(url)
+    # wiki_object = models.Wiki.objects.filter(project_id=project_id).first()
+    #
+    # if not wiki_object:
+    #     url = reverse('wiki', kwargs={'project_id': project_id})
+    #     return redirect(url)
     if request.method == 'GET':
         form = WikiModelForm(request)
-        return render(request, 'wiki_form.html', {'form': form, 'wiki_object': wiki_object})
+        return render(request, 'wiki_form.html', {'form': form})
+        # return render(request, 'wiki_form.html', {'form': form, 'wiki_object': wiki_object})
     form = WikiModelForm(request, request.POST)
     if form.is_valid():
         if form.instance.parent:
@@ -38,6 +44,7 @@ def wiki_add(request, project_id):
         form.save()
         url = reverse('wiki', kwargs={'project_id': project_id})
         return redirect(url)
+    return render(request, 'wiki_form.html', {'form': form})
 
 
 def wiki_catalog(request, project_id):
@@ -86,3 +93,44 @@ def wiki_edit(request, project_id, wiki_id):
         return redirect(preview_url)
 
     return render(request, 'wiki_form.html', {'form': form})
+
+
+# 网页中无法添加csrf token， 可在view函数处添加装饰器csrf_exempt(存放于包django.views.decorators.csrf中)
+@xframe_options_exempt
+@csrf_exempt
+def wiki_upload(request, project_id):
+    """
+    markdown插件上传图片
+    """
+    result = {
+        'success': 0,
+        'message': None,
+        'url': None,
+    }
+
+    image_object = request.FILES.get('editormd-image-file')
+    if not image_object:
+        result['message'] = "文件不存在"
+        return JsonResponse(result)
+
+    ext = image_object.name.rsplit('.')[-1]  # 获取文件后缀名
+    key = "{}.{}".format(uid(request.tracer.user.mobile_phone), ext)
+
+    # 文件对象上传到当前项目的桶中
+    image_url = upload_file(
+        bucket=request.tracer.project.bucket,
+        region=request.tracer.project.region,
+        file_object=image_object,
+        key=key,
+    )
+    print(image_url)
+
+    result = {
+        'success': 1,
+        'message': None,
+        'url': image_url,
+    }
+    print(result)
+    print(JsonResponse(result))
+    return JsonResponse(result)
+

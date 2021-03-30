@@ -1,9 +1,13 @@
 # -*-coding:utf-8 -*-
+import time
+import random
+
 from django.shortcuts import render, HttpResponse, redirect
 from django.http import JsonResponse
 
 from web.forms.project import ProjectModelForm
 from web import models
+from utils.tencent.cos import create_bucket
 
 
 def project_list(request):
@@ -15,7 +19,7 @@ def project_list(request):
         我创建的所有项目：已星标、未星标
         我参与的所有项目：已星标、未星标
         2,提取已星标
-        ​	列表 = 循环[我创建的所有项目] + [我参与的所有项目] 把已星标的数据提取
+        	列表 = 循环[我创建的所有项目] + [我参与的所有项目] 把已星标的数据提取
         得到三个列表：星标、创建、参与
         """
         project_dict = {'star': [], 'my': [], 'join': []}
@@ -38,7 +42,15 @@ def project_list(request):
 
     form = ProjectModelForm(request, data=request.POST)
     if form.is_valid():
+        # 为项目创建一个桶
+        bucket = "{}-{}-{}-1302119812".format(random.randint(1111, 9999), request.tracer.user.mobile_phone,
+                                              str(int(time.time())))
+        region = "ap-shanghai"
+        create_bucket(bucket, region)
+
         # 验证通过：项目名、颜色、描述 + creator谁创建的项目？
+        form.instance.bucket = bucket
+        form.instance.region = region
         form.instance.creator = request.tracer.user
         # 创建项目
         form.save()

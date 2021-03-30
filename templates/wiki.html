@@ -114,6 +114,7 @@
             initPreviewMarkdown();
         });
 
+         {#设置多级目录展示#}
         function initCatalog() {
             $.ajax({
                 url: "{% url 'wiki_catalog' project_id=request.tracer.project.id %}",

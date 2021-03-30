@@ -7,7 +7,7 @@ from web import models
 
 
 class ProjectModelForm(BootStrapForm, forms.ModelForm):
-    bootstrap_class_exclude = ['color']
+    bootstrap_class_exclude = ['color']   # 设置color参数不使用bootstrap form样式
 
     class Meta:
         model = models.Project

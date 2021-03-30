@@ -182,8 +182,8 @@ class Project(models.Model):
     creator = models.ForeignKey(verbose_name='创建者', to='UserInfo', on_delete=models.CASCADE)
     create_datetime = models.DateTimeField(verbose_name='创建时间', auto_now_add=True)
 
-    # bucket = models.CharField(verbose_name='cos桶', max_length=128)
-    # region = models.CharField(verbose_name='cos区域', max_length=32)
+    bucket = models.CharField(verbose_name='cos桶', max_length=128)
+    region = models.CharField(verbose_name='cos区域', max_length=32)
 
     # 查询：可以省事；
     # 增加、删除、修改：无法完成
@@ -209,4 +209,5 @@ class Wiki(models.Model):
     parent = models.ForeignKey(verbose_name='父文章', to='Wiki', null=True, blank=True, related_name='children', on_delete=models.CASCADE)
 
     def __str__(self):
+
         return self.title
