@@ -33,3 +33,29 @@ def upload_file(bucket, region, file_object, key):
         Key=key,
     )
     return "https://{}.cos.{}.myqcloud.com/{}".format(bucket, region, key)
+
+
+def delete_file(bucket, region, key):
+    # 文件对象上传到当前项目的桶中
+    config = CosConfig(Region=region, SecretId=settings.TENCENT_COS_ID, SecretKey=settings.TENCENT_COS_KEY)
+    client = CosS3Client(config)
+
+    response = client.delete_object(
+        Bucket=bucket,  # 从数据库中获取桶名称
+        Key=key,
+    )
+
+
+def delete_file_list(bucket, region, key_list):
+    # 文件对象上传到当前项目的桶中
+    config = CosConfig(Region=region, SecretId=settings.TENCENT_COS_ID, SecretKey=settings.TENCENT_COS_KEY)
+    client = CosS3Client(config)
+
+    objects = {
+        "Quiet": "true",
+        "Object": [key_list]
+    }
+    client.delete_objects(
+        Bucket=bucket,  # 从数据库中获取桶名称
+        Key=objects,
+    )
