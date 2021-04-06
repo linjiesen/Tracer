@@ -12,7 +12,7 @@ config = CosConfig(Region=region, SecretId=secret_id, SecretKey=secret_key)
 client = CosS3Client(config)
 
 response = client.upload_file(
-    Bucket='alroy-1302119812',
+    Bucket='7451-18395583854-1617302643-1302119812',
     LocalFilePath='test.jpg',
     Key='picture.jpg',
 )

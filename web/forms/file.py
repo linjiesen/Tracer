@@ -28,3 +28,7 @@ class FolderModelForm(BootStrapForm, forms.ModelForm):
         if exists:
             raise ValidationError('文件夹已经存在')
         return name
+
+
+class FileModelForm(BootStrapForm, forms.ModelForm):
+    pass

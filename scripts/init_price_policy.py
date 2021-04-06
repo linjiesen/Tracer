@@ -14,7 +14,7 @@ def run():
             project_num=5,
             project_member=2,
             project_space=20,
-            per_file_size=5
+            per_file_size=20,
         )
 
 

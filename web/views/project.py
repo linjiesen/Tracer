@@ -43,7 +43,7 @@ def project_list(request):
     form = ProjectModelForm(request, data=request.POST)
     if form.is_valid():
         # 为项目创建一个桶
-        bucket = "{}-{}-{}-1302119812".format(random.randint(1111, 9999), request.tracer.user.mobile_phone,
+        bucket = "{}-{}-{}".format(random.randint(1111, 9999), request.tracer.user.mobile_phone,
                                               str(int(time.time())))
         region = "ap-shanghai"
         create_bucket(bucket, region)
