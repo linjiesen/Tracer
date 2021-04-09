@@ -183,8 +183,7 @@ def file_post(request, project_id):
         # 通过ModelForm.save存储到数据库中的数据返回的isntance对象，无法通过get_xx_display获取choice的中文
         # form.instance.file_type = 1
         # form.update_user = request.tracer.user
-        # instance = form.save() # 添加成功之后，获取到新添加的那个对象（instance.id,instance.name,instance.file_type,
-        #   instace.get_file_type_display()
+        # instance = form.save() # 添加成功之后，获取到新添加的那个对象（instance.id,instance.name,instance.file_type,instace.get_file_type_display()
 
         # 校验通过：数据写入到数据库
         data_dict = form.cleaned_data
@@ -201,7 +200,7 @@ def file_post(request, project_id):
             'name': instance.name,
             'file_size': instance.file_size,
             'username': instance.update_user.username,
-            'datetime': instance.update_datetime.strftime("%Y年%m月%d日 %H:%M"),
+            'datetime': instance.update_datetime.strftime("%Y/%m/%d/ %H:%M"),
             'download_url': reverse('file_download', kwargs={"project_id": project_id, 'file_id': instance.id})
             # 'file_type': instance.get_file_type_display()
         }
@@ -216,13 +215,13 @@ def file_download(request, project_id, file_id):
     file_object = models.FileRepository.objects.filter(id=file_id, project_id=project_id).first()
     res = requests.get(file_object.file_path)
 
-    # 文件分块处理（适用于大文件）     @孙歆尧
+    # 文件分块处理（适用于大文件）
     data = res.iter_content()
 
-    # 设置content_type=application/octet-stream 用于提示下载框        @孙歆尧
+    # 设置content_type=application/octet-stream 用于提示下载框
     response = HttpResponse(data, content_type="application/octet-stream")
     from django.utils.encoding import escape_uri_path
 
-    # 设置响应头：中文件文件名转义      @王洋
+    # 设置响应头：中文件文件名转义
     response['Content-Disposition'] = "attachment; filename={};".format(escape_uri_path(file_object.name))
     return response
