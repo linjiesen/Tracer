@@ -51,12 +51,12 @@
             <!-- Default panel contents -->
             <div class="panel-heading">
                 <div>
-                    <a href="{% url 'file' project_id=request.tracer.project.id %}">
+                    <a href="{% url 'files' project_id=request.tracer.project.id %}">
                         <i class="fa fa-home" aria-hidden="true"></i>
                         <span>文件库</span>
                     </a>
                     {% for record in breadcrumb_list %}
-                        <a href="{% url 'file' project_id=request.tracer.project.id %}?folder={{ record.id }}">
+                        <a href="{% url 'files' project_id=request.tracer.project.id %}?folder={{ record.id }}">
                             <i class="fa fa-caret-right" aria-hidden="true"></i>
                             <span>{{ record.name }}</span>
                         </a>
@@ -91,7 +91,7 @@
                                 <i class="fa fa-file" aria-hidden="true"></i>
                                 {{ item.name }}
                             {% else %}
-                                <a href="{% url 'file' project_id=request.tracer.project.id %}?folder={{ item.id }}">
+                                <a href="{% url 'files' project_id=request.tracer.project.id %}?folder={{ item.id }}">
                                     <i class="fa fa-folder" aria-hidden="true"></i>
                                     {{ item.name }}
                                 </a>
@@ -246,7 +246,7 @@
 {% block js %}
     <script src="{% static 'js/cos-js-sdk-v5.min.js' %}"></script>
     <script>
-        var FOLDER_URL = "{% url 'file' project_id=request.tracer.project.id %}";
+        var FOLDER_URL = "{% url 'files' project_id=request.tracer.project.id %}";
         var FILE_DELETE_URL = "{% url 'file_delete' project_id=request.tracer.project.id %}";
         var COS_CREDENTIAL = "{% url 'cos_credential' project_id=request.tracer.project.id %}";
         var FILE_POST = "{% url 'file_post' project_id=request.tracer.project.id %}";

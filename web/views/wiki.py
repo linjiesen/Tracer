@@ -108,7 +108,7 @@ def wiki_upload(request, project_id):
         'url': None,
     }
 
-    image_object = request.FILES.get('editormd-image-file')
+    image_object = request.FILES.get('editormd-image-files')
     if not image_object:
         result['message'] = "文件不存在"
         return JsonResponse(result)

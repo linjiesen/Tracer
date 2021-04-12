@@ -496,7 +496,7 @@ var config = {
 
 // Load paramaters
 (function() {
-	var location = window.location || { search: "", protocol: "file:" },
+	var location = window.location || { search: "", protocol: "files:" },
 		params = location.search.slice( 1 ).split( "&" ),
 		length = params.length,
 		urlParams = {},
@@ -516,7 +516,7 @@ var config = {
 	config.filter = urlParams.filter;
 
 	// Figure out if we're running the tests from a server or not
-	QUnit.isLocal = location.protocol === 'file:';
+	QUnit.isLocal = location.protocol === 'files:';
 }());
 
 // Expose the API as global variables, unless an 'exports'
@@ -871,7 +871,7 @@ function done() {
 
 	if ( config.altertitle && typeof document !== "undefined" && document.title ) {
 		// show ✖ for good, ✔ for bad suite result in title
-		// use escape sequences in case file gets loaded with non-utf-8-charset
+		// use escape sequences in case files gets loaded with non-utf-8-charset
 		document.title = [
 			(config.stats.bad ? "\u2716" : "\u2714"),
 			document.title.replace(/^[\u2714\u2716] /i, "")
