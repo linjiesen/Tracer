@@ -5,7 +5,7 @@ cffi==1.11.5
 chardet @ file:///C:/ci/chardet_1605285153095/work
 cos-python-sdk-v5==1.9.4
 crcmod==1.7
-cryptography==2.3.1
+cryptography==3.3.2
 defusedxml==0.5.0
 dicttoxml==1.7.4
 diff-match-patch==20181111
