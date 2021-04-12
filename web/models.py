@@ -43,6 +43,7 @@ class Transaction(models.Model):
         (2, '已支付')
     )
     status = models.SmallIntegerField(verbose_name='状态', choices=status_choice)
+    id = models.AutoField(primary_key=True)
 
     order = models.CharField(verbose_name='订单号', max_length=64, unique=True)  # 唯一索引
 

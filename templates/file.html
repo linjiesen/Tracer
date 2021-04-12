@@ -1,5 +1,6 @@
 {% extends 'layout/manage.html' %}
 {% load static %}
+{% load dashboard %}
 {% block css %}
     <style>
         .panel-default .panel-heading {
@@ -98,7 +99,8 @@
                         </td>
                         <td>
                             {% if item.file_type == 1 %}
-                                {{ item.file_size }}
+                                {% user_space item.file_size %}
+{#                                {{ item.file_size }}#}
                             {% else %}
                                 -
                             {% endif %}
