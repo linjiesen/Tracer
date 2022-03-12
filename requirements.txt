@@ -27,7 +27,7 @@ mistune==0.8.4
 mysqlclient==2.0.3
 odfpy==1.4.0
 openpyxl==2.5.12
-Pillow==5.3.0
+Pillow==9.0.1
 pycparser @ file:///tmp/build/80754af9/pycparser_1594388511720/work
 pycryptodome==3.10.1
 PyMySQL==0.9.3
