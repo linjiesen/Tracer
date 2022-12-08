@@ -1,6 +1,6 @@
 asgiref==3.2.7
 asn1crypto @ file:///tmp/build/80754af9/asn1crypto_1596577642040/work
-certifi==2020.4.5.1
+certifi==2022.12.7
 cffi==1.11.5
 chardet @ file:///C:/ci/chardet_1605285153095/work
 cos-python-sdk-v5==1.9.4
